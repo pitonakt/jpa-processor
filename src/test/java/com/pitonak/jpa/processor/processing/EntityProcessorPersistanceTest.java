@@ -58,7 +58,7 @@ class EntityProcessorPersistanceTest {
     }
     
     @Test
-    @DisplayName("Should successfuly duplicate and persist copy of company")
+    @DisplayName("Should successfully duplicate and persist copy of company")
     public void when_company_copy_is_generated___should_successfully_persist() {                
         em.persist(company);
         em.persist(companyCopy);

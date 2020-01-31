@@ -14,7 +14,7 @@ import javax.lang.model.element.TypeElement;
 import com.google.auto.service.AutoService;
 
 @SupportedAnnotationTypes("javax.persistence.Entity")
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_10)
 @AutoService(Processor.class)
 public class EntityProcessor extends AbstractProcessor {
 

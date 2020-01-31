@@ -17,7 +17,7 @@ public class EntityProcessorTest {
         Compilation compilation = javac()
                 .withProcessors(new EntityProcessor())
                 .compile(JavaFileObjects.forResource("Person.java"), JavaFileObjects.forResource("Company.java"));
-                
+
         assertThat(compilation).succeededWithoutWarnings();
     }
 }

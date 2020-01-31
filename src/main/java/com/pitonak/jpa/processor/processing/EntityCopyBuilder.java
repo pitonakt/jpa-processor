@@ -1,21 +1,19 @@
 package com.pitonak.jpa.processor.processing;
 
-import static java.util.stream.Collectors.toSet;
+import io.vavr.control.Try;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.ReflectionUtils;
 
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.util.ReflectionUtils;
-
-import io.vavr.control.Try;
-import lombok.extern.slf4j.Slf4j;
+import static java.util.stream.Collectors.toSet;
 
 //@formatter:off
 @Slf4j

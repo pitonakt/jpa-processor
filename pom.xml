@@ -102,8 +102,14 @@
 		    <version>5.4.10.Final</version>
 		    <scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+            <version>2.2</version>
+            <scope>compile</scope>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>
@@ -113,8 +119,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${version.maven-compiler-plugin}</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>1.10</source>
+					<target>1.10</target>
 				</configuration>
 			</plugin>
 
