@@ -20,7 +20,7 @@
 			<version>${version.auto-service}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 		    <groupId>org.projectlombok</groupId>
 		    <artifactId>lombok</artifactId>
@@ -32,6 +32,18 @@
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-beans</artifactId>
 		    <version>5.2.3.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.9</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>javax.persistence</groupId>
+		    <artifactId>javax.persistence-api</artifactId>
+		    <version>2.2</version>
 		</dependency>
 		
 		<!-- Logging -->

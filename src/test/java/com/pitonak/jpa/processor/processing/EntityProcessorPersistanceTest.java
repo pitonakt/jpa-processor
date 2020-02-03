@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.pitonak.jpa.processor.processing.model.Address;
 import com.pitonak.jpa.processor.processing.model.Company;
 import com.pitonak.jpa.processor.processing.model.Person;
 
@@ -52,6 +53,7 @@ class EntityProcessorPersistanceTest {
             .stream().forEach(p -> {
                 p.setId(null);
                 p.setCompany(company);
+                p.getAddress().setId(null);
             });
         
         companyCopy = EntityCopyBuilder.copy(company);
@@ -70,6 +72,10 @@ class EntityProcessorPersistanceTest {
         CriteriaQuery<Person> criteriaPerson = em.getCriteriaBuilder().createQuery(Person.class);
         criteriaPerson.select(criteriaPerson.from(Person.class));
         assertThat(em.createQuery(criteriaPerson).getResultList().size(), is(10));
+        
+        CriteriaQuery<Address> criteriaAddress = em.getCriteriaBuilder().createQuery(Address.class);
+        criteriaAddress.select(criteriaAddress.from(Address.class));
+        assertThat(em.createQuery(criteriaAddress).getResultList().size(), is(10));
     }
     
     @AfterAll

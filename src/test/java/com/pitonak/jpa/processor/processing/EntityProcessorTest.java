@@ -17,7 +17,15 @@ public class EntityProcessorTest {
         Compilation compilation = javac()
                 .withProcessors(new EntityProcessor())
                 .compile(JavaFileObjects.forResource("Person.java"), JavaFileObjects.forResource("Company.java"));
-                
+        
+        /*for(PropertyDescriptor propertyDescriptor : 
+            Introspector.getBeanInfo(yourClass).getPropertyDescriptors()){
+
+            System.out.println(propertyDescriptor.getReadMethod());
+        }*/
+        
+        
+        
         assertThat(compilation).succeededWithoutWarnings();
     }
 }

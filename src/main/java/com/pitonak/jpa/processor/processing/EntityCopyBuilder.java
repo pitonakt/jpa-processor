@@ -10,7 +10,9 @@ import java.util.stream.Stream;
 
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ReflectionUtils;
 
@@ -29,6 +31,7 @@ public class EntityCopyBuilder {
         Try.of(() -> source.getClass().newInstance()).onSuccess(destination -> {
             final LinkedList<Field> collectionFields = new LinkedList<>();
             
+            final String[] processed = new String[] {null};
             final String[] ignoreFields = Stream.of(declaredFields)
                     .map(field -> {
                         field.setAccessible(true);
@@ -41,6 +44,14 @@ public class EntityCopyBuilder {
                             collectionFields.add(field);
                         }
                         
+                        if (field.isAnnotationPresent(OneToOne.class)) {
+                            Try.of(() -> copy(field.get(source)))
+                                .onSuccess(value -> {
+                                    ReflectionUtils.setField(field, destination, value);
+                                    processed[0] = field.getName();
+                                });
+                        }
+                        
                         field.setAccessible(false);
                         
                         return field;
@@ -49,7 +60,7 @@ public class EntityCopyBuilder {
                     .map(Field::getName)
                     .toArray(String[]::new);
                 
-                BeanUtils.copyProperties(source, destination, ignoreFields);
+                BeanUtils.copyProperties(source, destination, ArrayUtils.addAll(ignoreFields, processed));
                 
                 collectionFields.forEach(field -> {
                     field.setAccessible(true);
@@ -81,7 +92,7 @@ public class EntityCopyBuilder {
                     
                     field.setAccessible(false);
                 });
-                
+                                
                 target[0] = destination;
         });
         
