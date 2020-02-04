@@ -1,7 +1,7 @@
 package com.pitonak.jpa.processor.processing;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.pitonak.jpa.processor.EntityProcessor;
 import com.pitonak.jpa.processor.processing.model.Address;
 import com.pitonak.jpa.processor.processing.model.Company;
 import com.pitonak.jpa.processor.processing.model.Person;
@@ -56,7 +57,7 @@ class EntityProcessorPersistanceTest {
                 p.getAddress().setId(null);
             });
         
-        companyCopy = EntityCopyBuilder.copy(company);
+        companyCopy = EntityProcessor.copy(company);
     }
     
     @Test

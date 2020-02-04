@@ -1,31 +1,48 @@
 package com.pitonak.jpa.processor.processing;
 
-import static com.google.testing.compile.CompilationSubject.assertThat;
-import static com.google.testing.compile.Compiler.javac;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
+import static org.hamcrest.core.Every.everyItem;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.google.testing.compile.Compilation;
-import com.google.testing.compile.JavaFileObjects;
+import com.pitonak.jpa.processor.EntityProcessor;
+import com.pitonak.jpa.processor.processing.model.Company;
+import com.pitonak.jpa.processor.processing.model.Person;
+
+import uk.co.jemos.podam.api.PodamFactory;
+import uk.co.jemos.podam.api.PodamFactoryImpl;
 
 // @formatter:off
-public class EntityProcessorTest {
-    
-    @Test
-    public void shouldExecuteProcessor() {
-        
-        Compilation compilation = javac()
-                .withProcessors(new EntityProcessor())
-                .compile(JavaFileObjects.forResource("Person.java"), JavaFileObjects.forResource("Company.java"));
-        
-        /*for(PropertyDescriptor propertyDescriptor : 
-            Introspector.getBeanInfo(yourClass).getPropertyDescriptors()){
+class EntityProcessorTest {
 
-            System.out.println(propertyDescriptor.getReadMethod());
-        }*/
+    private final PodamFactory faker = new PodamFactoryImpl();
+
+    @Test
+    @DisplayName("Should nullify identifiers of single entity")
+    public void when_entity_copy_created___should_nullify_identifiers() {
+        Person person = faker.manufacturePojo(Person.class);
+
+        final Person copy = EntityProcessor.copy(person);
+
+        assertThat(copy, is(notNullValue()));
+        assertThat(person.getId(), is(not(copy.getId())));
+    }
+
+    @Test
+    @DisplayName("Should nullify identifiers of entity and nested entities")
+    public void when_entity_copy_created___should_nullify_nested_identifiers() throws Exception {
+        Company company = faker.manufacturePojo(Company.class);
+
+        final Company copy = EntityProcessor.copy(company);
         
-        
-        
-        assertThat(compilation).succeededWithoutWarnings();
+        assertThat(copy, is(notNullValue()));
+        assertThat(company.getId(), is(not(copy.getId())));
+        assertThat(copy.getEmployees(), everyItem(hasProperty("id", is(nullValue()))));
     }
 }

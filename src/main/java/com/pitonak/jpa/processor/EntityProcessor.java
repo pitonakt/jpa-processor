@@ -1,11 +1,9 @@
-package com.pitonak.jpa.processor.processing;
-
-import static java.util.stream.Collectors.toSet;
+//@formatter:off
+package com.pitonak.jpa.processor;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.persistence.Id;
@@ -16,12 +14,15 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ReflectionUtils;
 
+import com.pitonak.jpa.utils.EntityCollectionUtils;
+
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 
-//@formatter:off
 @Slf4j
-public class EntityCopyBuilder {
+public class EntityProcessor {
+    
+    private EntityProcessor() {}
     
     public static <T> T copy(T source) {
         
@@ -61,37 +62,7 @@ public class EntityCopyBuilder {
                     .toArray(String[]::new);
                 
                 BeanUtils.copyProperties(source, destination, ArrayUtils.addAll(ignoreFields, processed));
-                
-                collectionFields.forEach(field -> {
-                    field.setAccessible(true);
-                    
-                    Try.of(() -> (field.get(source)))
-                    .onSuccess(sourceCollection -> {
-                        final Set<T> collectionCopy = ((Collection<?>) sourceCollection).stream()
-                                .map(obj -> {
-                                    T copy = (T) copy(obj);
-                                    
-                                    String mappedBy = field.getAnnotation(OneToMany.class).mappedBy();
-                                    Try.of(() -> (copy.getClass().getDeclaredField(mappedBy)))
-                                        .onSuccess(f -> {
-                                            f.setAccessible(true);
-                                            ReflectionUtils.setField(f, copy, destination);
-                                            f.setAccessible(false);
-                                        });
-                                    
-                                    return copy;
-                                })
-                                .collect(toSet());
-                                                    
-                        Try.of(() -> (Collection) field.get(destination))
-                            .onSuccess(collection -> {
-                                collection.clear();
-                                collection.addAll(collectionCopy);
-                            });
-                    });
-                    
-                    field.setAccessible(false);
-                });
+                EntityCollectionUtils.copy(source, destination, collectionFields);
                                 
                 target[0] = destination;
         });
