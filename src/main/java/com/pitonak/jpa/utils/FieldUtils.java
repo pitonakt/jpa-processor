@@ -9,7 +9,7 @@ import com.pitonak.jpa.exception.EntityProcessingException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Utility class to make easier working with {@link java.lang.reflect.Field} objects
+ * Utility class to make easier working with {@link java.lang.reflect.Field} objects.
  * 
  * @author pitonakt
  * @since 1.0.0

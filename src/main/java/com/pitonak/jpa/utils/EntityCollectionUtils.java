@@ -12,15 +12,27 @@ import java.util.stream.Collectors;
 
 import javax.persistence.OneToMany;
 
-import com.pitonak.jpa.processor.EntityProcessor;
+import com.pitonak.jpa.processor.EntityCopyProcessor;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Utility class to work update Entities with {@link javax.persistence.OneToMany} relationships 
+ * 
+ * @author pitonakt
+ * @since 1.0.0
+ */
 @Slf4j
-public class EntityCollectionUtils {
+public final class EntityCollectionUtils {
 
     private EntityCollectionUtils() {}
 
+    /**
+     * 
+     * @param source
+     * @param target
+     * @param collection
+     */
     @SuppressWarnings("unchecked")
     public static <T> void copy(T source,
                      T target,
@@ -29,9 +41,10 @@ public class EntityCollectionUtils {
         Objects.requireNonNull(target, "target must not be null");
         Objects.requireNonNull(collection, "collection must not be null");
 
+        final String className = source.getClass().getName();
         if (log.isDebugEnabled()) {
-            log.debug("copy collection properties of class '{}', fields to be copied: '{}'",
-                    source.getClass().getName(), collection.stream().map(Field::getName).collect(Collectors.joining(", ")));
+            log.debug("Copy collection properties of class '{}', fields to be copied: '{}'.",
+                    className, collection.stream().map(Field::getName).collect(Collectors.joining(", ")));
         }
 
         collection.forEach(field -> {
@@ -42,7 +55,7 @@ public class EntityCollectionUtils {
             final T sourceCollection = FieldUtils.getValue(source, field);
             final Set<T> collectionCopy = ((Collection<T>) sourceCollection).stream()
                     .map(obj -> {
-                        final T objectCopy = EntityProcessor.copy(obj);
+                        final T objectCopy = EntityCopyProcessor.copy(obj);
                         final String mappedBy = field.getAnnotation(OneToMany.class).mappedBy();
                         final Field collectionField = FieldUtils.getField(objectCopy, mappedBy);
                         
@@ -59,5 +72,7 @@ public class EntityCollectionUtils {
 
             field.setAccessible(false);
         });
+        
+        log.debug("All collections of class '{}' have been successfully copied.", className);
     }
 }

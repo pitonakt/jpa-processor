@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.pitonak.jpa.processor.EntityProcessor;
+import com.pitonak.jpa.processor.EntityCopyProcessor;
 import com.pitonak.jpa.processor.processing.model.Address;
 import com.pitonak.jpa.processor.processing.model.Company;
 import com.pitonak.jpa.processor.processing.model.Person;
@@ -24,7 +24,7 @@ import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
 // @formatter:off
-class EntityProcessorPersistanceTest {
+class EntityCopyProcessorPersistanceTest {
 
     @PersistenceContext
     private static EntityManager em;
@@ -57,7 +57,7 @@ class EntityProcessorPersistanceTest {
                 p.getAddress().setId(null);
             });
         
-        companyCopy = EntityProcessor.copy(company);
+        companyCopy = EntityCopyProcessor.copy(company);
     }
     
     @Test
