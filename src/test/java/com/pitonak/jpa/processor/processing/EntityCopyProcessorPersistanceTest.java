@@ -1,7 +1,7 @@
 package com.pitonak.jpa.processor.processing;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -14,6 +14,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.pitonak.jpa.processor.EntityCopyProcessor;
+import com.pitonak.jpa.processor.processing.model.Address;
 import com.pitonak.jpa.processor.processing.model.Company;
 import com.pitonak.jpa.processor.processing.model.Person;
 
@@ -22,7 +24,7 @@ import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
 // @formatter:off
-class EntityProcessorPersistanceTest {
+class EntityCopyProcessorPersistanceTest {
 
     @PersistenceContext
     private static EntityManager em;
@@ -52,13 +54,14 @@ class EntityProcessorPersistanceTest {
             .stream().forEach(p -> {
                 p.setId(null);
                 p.setCompany(company);
+                p.getAddress().setId(null);
             });
         
-        companyCopy = EntityCopyBuilder.copy(company);
+        companyCopy = EntityCopyProcessor.copy(company);
     }
     
     @Test
-    @DisplayName("Should successfuly duplicate and persist copy of company")
+    @DisplayName("Should successfully duplicate and persist copy of company")
     public void when_company_copy_is_generated___should_successfully_persist() {                
         em.persist(company);
         em.persist(companyCopy);
@@ -70,6 +73,10 @@ class EntityProcessorPersistanceTest {
         CriteriaQuery<Person> criteriaPerson = em.getCriteriaBuilder().createQuery(Person.class);
         criteriaPerson.select(criteriaPerson.from(Person.class));
         assertThat(em.createQuery(criteriaPerson).getResultList().size(), is(10));
+        
+        CriteriaQuery<Address> criteriaAddress = em.getCriteriaBuilder().createQuery(Address.class);
+        criteriaAddress.select(criteriaAddress.from(Address.class));
+        assertThat(em.createQuery(criteriaAddress).getResultList().size(), is(10));
     }
     
     @AfterAll

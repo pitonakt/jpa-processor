@@ -9,49 +9,44 @@
 	<properties>
 		<!-- Dependency versions -->
 		<version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
-		<version.auto-service>1.0-rc6</version.auto-service>
+		<version.lombok>1.18.10</version.lombok>
+		<version.spring-beans>5.2.3.RELEASE</version.spring-beans>
+		<version.logback>1.2.3</version.logback>
+		<version.podam>7.2.3.RELEASE</version.podam>
+		<version.junit-jupiter>5.5.2</version.junit-jupiter>
+		<version.hibernate>5.4.10.Final</version.hibernate>
+		<version.hsqldb>2.5.0</version.hsqldb>
+		<version.jpa>2.2</version.jpa>
 	</properties>
 
 	<dependencies>
-
-		<dependency>
-			<groupId>com.google.auto.service</groupId>
-			<artifactId>auto-service</artifactId>
-			<version>${version.auto-service}</version>
-			<scope>provided</scope>
-		</dependency>
-		
 		<dependency>
 		    <groupId>org.projectlombok</groupId>
 		    <artifactId>lombok</artifactId>
-		    <version>1.18.10</version>
+		    <version>${version.lombok}</version>
 		    <scope>provided</scope>
 		</dependency>
 		
+		<!-- Used to copy bean properties -->
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-beans</artifactId>
-		    <version>5.2.3.RELEASE</version>
+		    <version>${version.spring-beans}</version>
 		</dependency>
 		
 		<!-- Logging -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.2.3</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>io.vavr</groupId>
-		    <artifactId>vavr</artifactId>
-		    <version>1.0.0-alpha-3</version>
+			<version>${version.logback}</version>
 		</dependency>
 		
 		<!-- Testing -->
 		<dependency>
-		    <groupId>commons-io</groupId>
-		    <artifactId>commons-io</artifactId>
-		    <version>2.6</version>
+		    <groupId>org.hamcrest</groupId>
+		    <artifactId>hamcrest-library</artifactId>
+		    <version>2.1</version>
+		    <scope>test</scope>
 		</dependency>
 		
 		<dependency>
@@ -64,50 +59,39 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.5.2</version>
+			<version>${version.junit-jupiter}</version>
 			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-		  <groupId>com.google.testing.compile</groupId>
-		  <artifactId>compile-testing</artifactId>
-		  <version>0.18</version>
-		  <scope>test</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>uk.co.jemos.podam</groupId>
 			<artifactId>podam</artifactId>
-			<version>7.2.3.RELEASE</version>
+			<version>${version.podam}</version>
 			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.hamcrest</groupId>
-		    <artifactId>java-hamcrest</artifactId>
-		    <version>2.0.0.0</version>
-		    <scope>test</scope>
 		</dependency>
 		
 		<dependency>
 		    <groupId>org.hsqldb</groupId>
 		    <artifactId>hsqldb</artifactId>
-		    <version>2.5.0</version>
+		    <version>${version.hsqldb}</version>
 		    <scope>test</scope>
 		</dependency>
 		
 		<dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-entitymanager</artifactId>
-		    <version>5.4.10.Final</version>
+		    <version>${version.hibernate}</version>
 		    <scope>test</scope>
 		</dependency>
-
-	</dependencies>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+            <version>${version.jpa}</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -117,7 +101,11 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-surefire-plugin</artifactId>
+			    <version>3.0.0-M4</version>
+			</plugin>
 		</plugins>
 	</build>
 </project>
