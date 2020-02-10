@@ -94,6 +94,7 @@
             <artifactId>javax.persistence-api</artifactId>
             <version>${version.jpa}</version>
         </dependency>
+        
     </dependencies>
 
 	<build>
