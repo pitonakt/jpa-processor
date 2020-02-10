@@ -2,7 +2,8 @@ name: JPA Processor CI pipeline
 
 on:
   push:
-    branches: develop
+    branches: 'develop'
+    branches-ignore: master
 
 jobs:
   build:
