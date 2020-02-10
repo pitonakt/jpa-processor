@@ -17,6 +17,12 @@
 		<version.hibernate>5.4.10.Final</version.hibernate>
 		<version.hsqldb>2.5.0</version.hsqldb>
 		<version.jpa>2.2</version.jpa>
+		
+		<!-- Code coverage with sonarcloud -->
+		<sonar.projectKey>pitonakt_jpa-processor</sonar.projectKey>
+	    <sonar.organization>jpa-processor</sonar.organization>
+	  	<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+	  	<sonar.login>${env.SONAR_LOGIN}</sonar.login>
 	</properties>
 
 	<dependencies>
