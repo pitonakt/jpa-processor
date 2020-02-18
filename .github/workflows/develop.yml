@@ -18,8 +18,6 @@ jobs:
       with:
         java-version: 1.8
     - name: Run tests and execute code coverage with SonarCloud
-      env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: mvn verify sonar:sonar
+      run: mvn verify sonar:sonar -Dsonar.login=${{ secrets.SONAR_TOKEN }}
     - name: Build final jar
-      run: mvn -B package -DskipTests --file pom.xml 
+      run: mvn -B package -DskipTests --file pom.xml
