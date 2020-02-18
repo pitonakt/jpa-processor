@@ -7,13 +7,16 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.pitonak.jpa.exception.EntityProcessingException;
 import com.pitonak.jpa.processor.EntityCopyProcessor;
 import com.pitonak.jpa.processor.processing.model.Company;
 import com.pitonak.jpa.processor.processing.model.Person;
+import com.pitonak.jpa.utils.FieldUtils;
 
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
@@ -44,5 +47,11 @@ class EntityCopyProcessorTest {
         assertThat(copy, is(notNullValue()));
         assertThat(company.getId(), is(not(copy.getId())));
         assertThat(copy.getEmployees(), everyItem(hasProperty("id", is(nullValue()))));
+    }
+    
+    @Test
+    @DisplayName("Should throw an exception when class is missing field")
+    public void when_no_field_is_found___should_throw_an_exception() {
+        assertThrows(EntityProcessingException.class, () -> FieldUtils.getField(new Company(), "unknown"));
     }
 }
