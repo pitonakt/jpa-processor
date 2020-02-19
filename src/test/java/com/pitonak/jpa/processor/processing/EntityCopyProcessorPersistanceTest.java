@@ -4,6 +4,7 @@ package com.pitonak.jpa.processor.processing;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -11,8 +12,9 @@ import java.util.stream.LongStream;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -36,8 +38,8 @@ import uk.co.jemos.podam.api.PodamFactoryImpl;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class EntityCopyProcessorPersistanceTest {
 
-    @PersistenceContext
-    private static EntityManager em;
+    
+    private static EntityManager em = Persistence.createEntityManagerFactory("hsqldb").createEntityManager();
     
     private static final PodamFactory faker = new PodamFactoryImpl();
     
@@ -46,7 +48,6 @@ class EntityCopyProcessorPersistanceTest {
     
     @BeforeAll
     public static void setUp() {
-        em = Persistence.createEntityManagerFactory("hsqldb").createEntityManager();
         em.getTransaction().begin();
         
         LongStream.rangeClosed(1, 3)
@@ -117,7 +118,17 @@ class EntityCopyProcessorPersistanceTest {
         
         CriteriaQuery<Role> criteriaRole = em.getCriteriaBuilder().createQuery(Role.class);
         criteriaRole.select(criteriaRole.from(Role.class));
+                
+        final CriteriaBuilder criteriaBuilderPerson = em.getCriteriaBuilder();
+        final CriteriaQuery<Person> criteriaQueryPerson = criteriaBuilderPerson.createQuery(Person.class);
+        final Root<Person> person = criteriaQueryPerson.from(Person.class);
+        criteriaQueryPerson.select(person)
+            .where(criteriaBuilderPerson.isNotEmpty(person.get("roles")))
+            .getSelection();
+        final List<Person> personsWithRoles = em.createQuery(criteriaQueryPerson).getResultList();
+        
         assertThat(em.createQuery(criteriaRole).getResultList().size(), is(3));
+        assertThat(personsWithRoles.size(), is(3));
     }
     
     @AfterAll
