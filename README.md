@@ -28,7 +28,7 @@ Create **Person** entity representing company's employees.
 
 ```java
 @Entity
-public class Company {
+public class Person {
 
     @Id @GeneratedValue
     private long id;
