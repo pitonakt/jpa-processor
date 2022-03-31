@@ -10,7 +10,7 @@
 		<!-- Dependency versions -->
 		<version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
 		<version.lombok>1.18.10</version.lombok>
-		<version.spring-beans>5.2.3.RELEASE</version.spring-beans>
+		<version.spring-beans>5.3.18</version.spring-beans>
 		<version.logback>1.2.3</version.logback>
 		<version.podam>7.2.3.RELEASE</version.podam>
 		<version.junit-jupiter>5.5.2</version.junit-jupiter>
